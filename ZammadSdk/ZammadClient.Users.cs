@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Zammad.Sdk.Users;
@@ -19,7 +18,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
     {
-        return await SendAsync<User>(HttpMethod.Get, "/api/v1/users/me", cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Users.GetCurrentUserAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -40,17 +39,7 @@ public sealed partial class ZammadClient
         bool? expand = null,
         CancellationToken cancellationToken = default)
     {
-        if (page <= 0) throw new ArgumentOutOfRangeException(nameof(page), "Page must be greater than 0.");
-        if (perPage <= 0) throw new ArgumentOutOfRangeException(nameof(perPage), "PerPage must be greater than 0.");
-
-        var url = $"/api/v1/users?page={page}&per_page={perPage}";
-        if (expand.HasValue)
-        {
-            url += $"&expand={expand.Value.ToString().ToLowerInvariant()}";
-        }
-
-        var users = await SendAsync<List<User>>(HttpMethod.Get, url, cancellationToken: cancellationToken).ConfigureAwait(false);
-        return users;
+        return await Users.GetUsersAsync(page, perPage, expand, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -66,15 +55,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task<User> GetUserAsync(long id, bool? expand = null, CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "User ID must be greater than 0.");
-
-        var url = $"/api/v1/users/{id}";
-        if (expand.HasValue)
-        {
-            url += $"?expand={expand.Value.ToString().ToLowerInvariant()}";
-        }
-
-        return await SendAsync<User>(HttpMethod.Get, url, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Users.GetUserAsync(id, expand, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -89,9 +70,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task<User> CreateUserAsync(UserCreateRequest request, CancellationToken cancellationToken = default)
     {
-        if (request == null) throw new ArgumentNullException(nameof(request));
-
-        return await SendAsync<User>(HttpMethod.Post, "/api/v1/users", request, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Users.CreateUserAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -108,10 +87,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task<User> UpdateUserAsync(long id, UserUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "User ID must be greater than 0.");
-        if (request == null) throw new ArgumentNullException(nameof(request));
-
-        return await SendAsync<User>(HttpMethod.Put, $"/api/v1/users/{id}", request, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Users.UpdateUserAsync(id, request, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -125,9 +101,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task DeleteUserAsync(long id, CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "User ID must be greater than 0.");
-
-        await SendAsync<object>(HttpMethod.Delete, $"/api/v1/users/{id}", cancellationToken: cancellationToken).ConfigureAwait(false);
+        await Users.DeleteUserAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -148,19 +122,6 @@ public sealed partial class ZammadClient
         bool? expand = null,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(query)) throw new ArgumentException("Query cannot be null or whitespace.", nameof(query));
-
-        var url = $"/api/v1/users/search?query={Uri.EscapeDataString(query)}";
-        if (limit.HasValue)
-        {
-            url += $"&limit={limit.Value}";
-        }
-        if (expand.HasValue)
-        {
-            url += $"&expand={expand.Value.ToString().ToLowerInvariant()}";
-        }
-
-        var users = await SendAsync<List<User>>(HttpMethod.Get, url, cancellationToken: cancellationToken).ConfigureAwait(false);
-        return users;
+        return await Users.SearchUsersAsync(query, limit, expand, cancellationToken).ConfigureAwait(false);
     }
 }

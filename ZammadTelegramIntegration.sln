@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZammadSdk", "ZammadSdk\Zamm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", "{7BCEA319-CE75-4909-83E8-8ACC0CBC369D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZammadSdk.Tests", "ZammadSdk.Tests\ZammadSdk.Tests.csproj", "{3350E570-54BD-4925-8B55-44BCA13DF66E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,9 +20,13 @@ Global
 		{F62710BA-8FE7-F63B-FDE2-DC2DD7B55169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F62710BA-8FE7-F63B-FDE2-DC2DD7B55169}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Release|Any CPU.Build.0 = Release|Any CPU
+                {7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {7BCEA319-CE75-4909-83E8-8ACC0CBC369D}.Release|Any CPU.Build.0 = Release|Any CPU
+                {3350E570-54BD-4925-8B55-44BCA13DF66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                {3350E570-54BD-4925-8B55-44BCA13DF66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+                {3350E570-54BD-4925-8B55-44BCA13DF66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+                {3350E570-54BD-4925-8B55-44BCA13DF66E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

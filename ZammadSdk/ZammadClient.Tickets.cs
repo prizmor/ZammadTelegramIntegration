@@ -27,17 +27,7 @@ public sealed partial class ZammadClient
         bool? expand = null,
         CancellationToken cancellationToken = default)
     {
-        if (page <= 0) throw new ArgumentOutOfRangeException(nameof(page), "Page must be greater than 0.");
-        if (perPage <= 0) throw new ArgumentOutOfRangeException(nameof(perPage), "PerPage must be greater than 0.");
-
-        var url = $"/api/v1/tickets?page={page}&per_page={perPage}";
-        if (expand.HasValue)
-        {
-            url += $"&expand={expand.Value.ToString().ToLowerInvariant()}";
-        }
-
-        var tickets = await SendAsync<List<Ticket>>(HttpMethod.Get, url, cancellationToken: cancellationToken).ConfigureAwait(false);
-        return tickets;
+        return await Tickets.GetTicketsAsync(page, perPage, expand, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -53,15 +43,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task<Ticket> GetTicketAsync(long id, bool? expand = null, CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "Ticket ID must be greater than 0.");
-
-        var url = $"/api/v1/tickets/{id}";
-        if (expand.HasValue)
-        {
-            url += $"?expand={expand.Value.ToString().ToLowerInvariant()}";
-        }
-
-        return await SendAsync<Ticket>(HttpMethod.Get, url, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Tickets.GetTicketAsync(id, expand, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -82,11 +64,7 @@ public sealed partial class ZammadClient
         string? onBehalfOf = null,
         CancellationToken cancellationToken = default)
     {
-        if (request == null) throw new ArgumentNullException(nameof(request));
-        if (string.IsNullOrWhiteSpace(request.Title)) throw new ArgumentException("Title is required.", nameof(request));
-        if (request.Article == null) throw new ArgumentException("Article is required.", nameof(request));
-
-        return await SendAsync<Ticket>(HttpMethod.Post, "/api/v1/tickets", request, onBehalfOf, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Tickets.CreateTicketAsync(request, onBehalfOf, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -109,10 +87,7 @@ public sealed partial class ZammadClient
         string? onBehalfOf = null,
         CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "Ticket ID must be greater than 0.");
-        if (request == null) throw new ArgumentNullException(nameof(request));
-
-        return await SendAsync<Ticket>(HttpMethod.Put, $"/api/v1/tickets/{id}", request, onBehalfOf, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await Tickets.UpdateTicketAsync(id, request, onBehalfOf, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -126,9 +101,7 @@ public sealed partial class ZammadClient
     /// </remarks>
     public async Task DeleteTicketAsync(long id, CancellationToken cancellationToken = default)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "Ticket ID must be greater than 0.");
-
-        await SendAsync<object>(HttpMethod.Delete, $"/api/v1/tickets/{id}", cancellationToken: cancellationToken).ConfigureAwait(false);
+        await Tickets.DeleteTicketAsync(id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

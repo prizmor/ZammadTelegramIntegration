@@ -25,11 +25,7 @@ public sealed partial class ZammadClient
     {
         if (ticketId <= 0) throw new ArgumentOutOfRangeException(nameof(ticketId), "Ticket ID must be greater than 0.");
 
-        var articles = await SendAsync<List<TicketArticle>>(
-            HttpMethod.Get,
-            $"/api/v1/ticket_articles/by_ticket/{ticketId}",
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-        return articles;
+        return await Tickets.GetTicketArticlesAsync(ticketId, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
